@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>{{ title }}</h1>
+    
+    {% if age > 18 %}
+    	<p>Tu es majeur</p>
+    {% else  %}
+    	<p>Tu es mineure</p>
+    {% endif %}
+    
+    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. </p>
+    <p>Duis velit est, feugiat at maximus vitae, varius in diam. Sed pulvinar eu nunc efficitur gravida. Proin quis fringilla justo. Curabitur porta, ante a convallis eleifend, sapien nunc iaculis nisi, sed posuere metus nisl et nulla. Integer quis cursus nunc. Sed tempus turpis dui, eget fermentum mi scelerisque euismod. Phasellus aliquet sollicitudin aliquam. Nulla orci nisl, dapibus eu porta vel, tincidunt eu nisi. Cras finibus diam metus, ut bibendum dui cursus quis. Cras vulputate interdum lectus. </p>
+
+{% endblock %}
