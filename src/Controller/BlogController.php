@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use App\Form\ArticleType;
 
 
 class BlogController extends Controller
@@ -40,34 +41,37 @@ class BlogController extends Controller
     
     /**
      * @Route("/blog/new", name="blog_create")
+     * @Route("/blog/{id}/edit", name="blog_edit")
      */
-    public function create(Request $requete, ObjectManager $manager){
-        $article = new Article();
+    public function form(Article $article = null, Request $request, ObjectManager $manager){
+        if(!$article){
+            $article = new Article();
+        }
+        
+        
         $form = $this->createFormBuilder($article)
-                     ->add('title', TextType::class, [
-                         'attr' => [
-                             'placeholder' => "Titre de l'article"
-                         ]
-                     ])
-                     ->add('content', TextareaType::class, [
-                         'attr' => [
-                             'placeholder' => "Contenu de l'article"
-                         ]
-                     ])
-                     ->add('image', TextType::class,[
-                         'attr' => [
-                             'placeholder' => "Image de l'article"
-                         ]
-                     ])
-                     ->add('save', SubmitType::class, [
-                         'label' => 'Ajouter l\'article'
-                     ])
+                     ->add('title', TextType::class)
+                     ->add('content', TextareaType::class)
+                     ->add('image', TextType::class)
                      ->getForm();
-                     
-                     
+        //$form = $this->createForm(ArticleType::class, $article);
+        //bind        
+        $form->handleRequest($request);
+        
+        if($form->isSubmitted() && $form->isValid()){
+            if(!$article->getId()){
+                $article->setCreatedAt(new \DateTime());
+            }
+            
+            $manager->persist($article);
+            $manager->flush();
+            
+            return $this->redirectToRoute('blog_show', ['id' => $article->getId()]);
+        }
         
         return $this->render('blog/create.html.twig', [
-            'formArticle' => $form->createView()
+            'formArticle' => $form->createView(),
+            'editMode' => $article->getId() !== null
         ]);
     }
     
